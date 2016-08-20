@@ -1,0 +1,4 @@
+﻿c:\Users\moviedo\.nuget\packages\CreateNewNuGetPackageFromProjectAfterEachBuild\1.8.9\content\_CreateNewNuGetPackage\DoNotModify\nuget.exe  spec c:\projects\GitHub-sourcetree\fwk_12_core\fwk.base.core\bin\Debug\netcoreapp1.0\fwk.base.core.dll
+c:\Users\moviedo\.nuget\packages\CreateNewNuGetPackageFromProjectAfterEachBuild\1.8.9\content\_CreateNewNuGetPackage\DoNotModify\nuget.exe  spec c:\projects\GitHub-sourcetree\fwk_12_core\fwk.base.core\
+
+c:\Users\moviedo\.nuget\packages\CreateNewNuGetPackageFromProjectAfterEachBuild\1.8.9\content\_CreateNewNuGetPackage\DoNotModify\nuget.exe pack c:\projects\GitHub-sourcetree\fwk_12_core\fwk.base.core\bin\Debug\netcoreapp1.0\fwk.base.core.dll.nuspec
