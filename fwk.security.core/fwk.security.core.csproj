@@ -12,4 +12,10 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="fwk.base.core">
+      <HintPath>..\..\..\konecta\konecta-projects\chatBotEpironApi_core_2.0\libs\fwk.base.core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

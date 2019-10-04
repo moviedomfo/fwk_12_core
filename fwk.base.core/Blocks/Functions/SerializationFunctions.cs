@@ -135,6 +135,26 @@ namespace Fwk.HelperFunctions
 
         #endregion
 
+
+        /// <summary>
+        /// Serializar un objeto utilizando Newtonsoft.Json.SerializeObject
+        /// <code>
+        /// Contrato c = new Contrato();
+        /// //set c properties here 
+        /// string strContratoJSON = (Contrato)SerializationFunctions.SerializeObjectToJson_Newtonsoft(typeOf(Contrato),c);
+        /// 
+        /// </code>
+        /// </summary>
+        /// <param name="objType">typeOf(type)</param>
+        /// <param name="obj">Objetc</param>
+        /// <returns></returns>
+        public static string SerializeObjectToJson_Newtonsoft(object obj)
+        {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj, new JsonSerializerSettings());
+
+            return json;
+        }
+
         /// <summary>
         /// Serealiza pobject to json
         /// </summary>
