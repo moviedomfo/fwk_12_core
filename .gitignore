@@ -9,3 +9,5 @@ fwk.base.core/obj/Debug/netcoreapp1.0/dotnet-compile.assemblyinfo.cs
 fwk.base.core/obj/Debug/netcoreapp1.0/dotnet-compile.rsp
 .vs/restore.dg
 .vs/fwk.base.core/v14/.suo
+obj/
+bin/
