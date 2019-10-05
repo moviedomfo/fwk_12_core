@@ -7,7 +7,9 @@ fwk.base.core/obj/Debug/netcoreapp1.0/.SDKVersion
 fwk.base.core/obj/Debug/netcoreapp1.0/dotnet-compile-csc.rsp
 fwk.base.core/obj/Debug/netcoreapp1.0/dotnet-compile.assemblyinfo.cs
 fwk.base.core/obj/Debug/netcoreapp1.0/dotnet-compile.rsp
-.vs/restore.dg
+.vs
 .vs/fwk.base.core/v14/.suo
 obj/
 bin/
+.vs/fwk.base.core/v16/.suo
+fwk.base.core/fwk.base.core.csproj.user
