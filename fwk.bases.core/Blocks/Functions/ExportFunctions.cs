@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Data;
+
 
 namespace Fwk.HelperFunctions
 {
@@ -14,63 +12,7 @@ namespace Fwk.HelperFunctions
     /// </summary>
     public class ExportFunctions
     {
-        /// <summary>
-        /// Crea un archivo xml q pueda abrirse con excel
-        /// </summary>
-        /// <param name="pdt_Origen"></param>
-        /// <param name="psz_NombreTab"></param>
-        /// <returns></returns>
-        public static bool ExportToExcel(DataTable pdt_Origen, string psz_NombreTab)
-        {
-            try
-            {
-                int wiNumeroFilas = pdt_Origen.Rows.Count + 1;
-                int wiNumeroColumnas = pdt_Origen.Columns.Count;
-                SaveFileDialog woSaveDialog = new SaveFileDialog();
-                woSaveDialog.Filter = "XLS" + " files (*." + "XLS" + ")|*." + "XLS" + "|All files (*.*)|*.*";
-
-                if (woSaveDialog.ShowDialog() == DialogResult.OK)
-                {
-                    string wszDestino;
-                    wszDestino = woSaveDialog.FileName;
-                    System.IO.FileStream woFileStream;
-                    woFileStream = new FileStream(wszDestino, FileMode.Create);
-                    System.IO.StreamWriter woStreamWriter;
-                    woStreamWriter = new StreamWriter(woFileStream);
-                    woStreamWriter.Write(GenerarEncabezado(psz_NombreTab));
-                    woStreamWriter.Write(GenerarCabeceraTabla(wiNumeroFilas, wiNumeroColumnas, 80));
-                    woStreamWriter.Write(AbrirFila());
-                    for (int j = 0; j < wiNumeroColumnas; j++)
-                        woStreamWriter.Write(CrearCelda(pdt_Origen.Columns[j].Caption));
-                    woStreamWriter.Write(CerrarFila());
-                    foreach (DataRowView wDataView in pdt_Origen.DefaultView)
-                    {
-                        woStreamWriter.Write(AbrirFila());
-                        for (int i = 0; i < wiNumeroColumnas; i++)
-                        {
-                            if (wDataView[i] != null)
-                                woStreamWriter.Write(CrearCelda(wDataView[i].ToString()));
-                            else
-                                woStreamWriter.Write(CrearCelda(""));
-                        }
-
-                        woStreamWriter.Write(CerrarFila());
-                    }
-                    woStreamWriter.Write(GenerarPie());
-                    woStreamWriter.Close();
-                    woFileStream.Close();
-                    return true;
-
-                }
-                else
-                    return false;
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+    
 
         #region Private Methods
         private static string GenerarEncabezado(string psz_NombreTab)

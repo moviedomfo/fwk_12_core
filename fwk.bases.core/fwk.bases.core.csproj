@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>fwk_12_core</RootNamespace>
-    <AssemblyName>fwk.base.core</AssemblyName>
+    <RootNamespace>fwk.bases</RootNamespace>
+    <AssemblyName>fwk.bases.core</AssemblyName>
 	    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
   </PropertyGroup>

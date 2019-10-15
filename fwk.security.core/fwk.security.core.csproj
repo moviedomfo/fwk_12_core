@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,9 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="fwk.base.core">
-      <HintPath>..\..\..\konecta\konecta-projects\chatBotEpironApi_core_2.0\libs\fwk.base.core.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\fwk.bases.core\fwk.bases.core.csproj" />
   </ItemGroup>
 
 </Project>

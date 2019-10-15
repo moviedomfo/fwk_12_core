@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fwk.security.core", "fwk.security.core\fwk.security.core.csproj", "{3017C89B-E0C0-4239-9D4C-B92754E6BE36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fwk.base.core", "fwk.base.core\fwk.base.core.csproj", "{BEED4D78-7409-477A-AF95-04427A63F63E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fwk.bases.core", "fwk.bases.core\fwk.bases.core.csproj", "{BEED4D78-7409-477A-AF95-04427A63F63E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
