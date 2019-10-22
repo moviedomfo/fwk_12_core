@@ -533,13 +533,13 @@ namespace Fwk.Security.Identity
             {
                 if (user.LockoutEnabled)
                 {
-                    result.Status = SignInStatus.LockedOut.ToString();
+                    result.Status = SecuritySignInStatus.LockedOut.ToString();
                     result.Message = "Usuario bloqueado";
                     return result;
                 }
                 if (user.EmailConfirmed == false)
                 {
-                    result.Status = SignInStatus.RequiresVerification.ToString();
+                    result.Status = SecuritySignInStatus.RequiresVerification.ToString();
                     result.Message = "Usuario require verificaciión";
                     return result;
                 }
@@ -548,13 +548,13 @@ namespace Fwk.Security.Identity
 
                 if (!isValid)
                 {
-                    result.Status = SignInStatus.Failure.ToString();
+                    result.Status = SecuritySignInStatus.Failure.ToString();
                     result.Message = "Password es incorrecto";
 
                 }
                 else
                 {
-                    result.Status = SignInStatus.Success.ToString();
+                    result.Status = SecuritySignInStatus.Success.ToString();
                     result.User = user;
                     result.User.PasswordHash = "";
                     var roles = result.User.SecurityRoles.Count;
@@ -565,7 +565,7 @@ namespace Fwk.Security.Identity
             }
             else
             {
-                result.Status = SignInStatus.Failure.ToString();
+                result.Status = SecuritySignInStatus.Failure.ToString();
                 result.Message = "Usuario no existe";
             }
 
@@ -602,7 +602,7 @@ namespace Fwk.Security.Identity
             }
             catch (Exception ex)
             {
-                return helper.Get_errorIdentityResult( Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex) });
+                return helper.Get_errorIdentityResult( Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex) );
             }
         }
 
@@ -625,7 +625,7 @@ namespace Fwk.Security.Identity
             }
             catch (Exception ex)
             {
-                return helper.Get_errorIdentityResult( Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex) });
+                return helper.Get_errorIdentityResult( Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex) );
             }
 
 
@@ -748,7 +748,7 @@ namespace Fwk.Security.Identity
                             var rule = db.SecurityRules.Where(p => p.Name == ruleName).FirstOrDefault();
                             if (rule == null)
                             {
-                                result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleName) });
+                                result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleName) );
                                 break;
                             }
 
@@ -765,13 +765,13 @@ namespace Fwk.Security.Identity
                     else
                     {
 
-                        result =helper.Get_errorIdentityResult( "Rol no existe .- " });
+                        result =helper.Get_errorIdentityResult( "Rol no existe .- " );
                     }
                 }
             }
             catch (Exception ex)
             {
-                result =helper.Get_errorIdentityResult( ex.Message });
+                result =helper.Get_errorIdentityResult( ex.Message);
 
             }
             return result;
