@@ -896,7 +896,7 @@ namespace Fwk.Security.Identity
             }
 
         }
-        static Guid emptyGuid = new Guid("00000000-0000-0000-0000-000000000000");
+        
         public static void Rule_Create(SecurityRule rule, string sec_provider)
         {
             try
@@ -972,7 +972,7 @@ namespace Fwk.Security.Identity
                             var rol = db.SecurityRoles.Where(p => p.Name == rolName).FirstOrDefault();
                             if (rol == null)
                             {
-                                result =helper.Get_errorIdentityResult( String.Format("La rol {0} no existe .- ", rolName) });
+                                result =helper.Get_errorIdentityResult( String.Format("La rol {0} no existe .- ", rolName) );
                                 break;
                             }
 
@@ -989,13 +989,13 @@ namespace Fwk.Security.Identity
                     else
                     {
 
-                        result =helper.Get_errorIdentityResult( "Regla no existe .- " });
+                        result =helper.Get_errorIdentityResult( "Regla no existe .- " );
                     }
                 }
             }
             catch (Exception ex)
             {
-                result =helper.Get_errorIdentityResult( ex.Message });
+                result =helper.Get_errorIdentityResult( ex.Message );
 
             }
             return result;
@@ -1116,7 +1116,7 @@ namespace Fwk.Security.Identity
                             var rule = db.SecurityRules.Where(p => p.Id == ruleId).FirstOrDefault();
                             if (rule == null)
                             {
-                                result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleId) });
+                                result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleId) );
                                 break;
                             }
 
@@ -1133,13 +1133,13 @@ namespace Fwk.Security.Identity
                     else
                     {
 
-                        result =helper.Get_errorIdentityResult( "Categoría no existe .- " });
+                        result =helper.Get_errorIdentityResult( "Categoría no existe .- " );
                     }
                 }
             }
             catch (Exception ex)
             {
-                result =helper.Get_errorIdentityResult( ex.Message });
+                result =helper.Get_errorIdentityResult( ex.Message);
 
             }
             return result;
