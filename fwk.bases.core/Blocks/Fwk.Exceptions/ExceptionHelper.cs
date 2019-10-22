@@ -1,6 +1,5 @@
 using System;
 using System.Data.SqlClient;
-
 using System.Xml;
 using System.Text;
 using Fwk.Bases;
@@ -8,7 +7,7 @@ using Fwk.Bases;
 namespace Fwk.Exceptions
 {
     /// <summary>
-    /// Enumeracion que reprecenta los tipos de excepciones de 
+    /// Enumeracion que representa los tipos de excepciones de 
     /// </summary>
     public enum FwkExceptionTypes
     {
@@ -74,7 +73,7 @@ namespace Fwk.Exceptions
                         wServiceError.Namespace = tex.Namespace;
                         wServiceError.Class =  tex.Class;
                         wServiceError.Assembly = tex.Assembly;
-                        
+                        wServiceError.ServiceName = tex.ServiceName;
                         break;
                     }
                 case FwkExceptionTypes.FunctionalException:
@@ -82,6 +81,7 @@ namespace Fwk.Exceptions
                         FunctionalException fex = (FunctionalException)ex;
                         wServiceError.ErrorId = fex.ErrorId;
                         wServiceError.Type = ex.GetType().Name;
+                        wServiceError.ServiceName = fex.ServiceName;
                         break;
                     }
                 case FwkExceptionTypes.OtherException:
@@ -127,6 +127,9 @@ namespace Fwk.Exceptions
                                 ex = new FunctionalException(Convert.ToInt32(err.ErrorId), inner, err.Message);
                             else
                                 ex = new FunctionalException(null, inner, err.Message);
+
+                            ((FunctionalException)ex).ServiceName = err.ServiceName;
+                           
                         }
                         else
                         {
@@ -134,6 +137,7 @@ namespace Fwk.Exceptions
                                 ex = new FunctionalException(Convert.ToInt32(err.ErrorId),  err.Message);
                             else
                                 ex = new FunctionalException(err.Message);
+                            ((FunctionalException)ex).ServiceName = err.ServiceName;
                         }
                         
                         ex.Source = err.Source;
@@ -151,6 +155,7 @@ namespace Fwk.Exceptions
                         ((TechnicalException)ex).Namespace = err.Namespace;
                         ((TechnicalException)ex).Class = err.Class;
                         ((TechnicalException)ex).Assembly = err.Assembly;
+                        ((TechnicalException)ex).ServiceName = err.ServiceName;
                         //((TechnicalException)ex).StackTrace = err.StackTrace;
                         break;
                     }
@@ -177,18 +182,10 @@ namespace Fwk.Exceptions
         /// <returns>Excepcion procesada.</returns>
         public static Exception ProcessException(Exception exception, object sourceObject)
         {
-            // Si la excepcion es de SQL Server evalua si debe retornar
-            // una FunctionalException o una TechnicalException.
-            if (exception is SqlException && ((SqlException)exception).Number >= 50000)
-            {
-                string[] wParams;
-                string wMsgId = ProcessRaiseErrorMsg(exception.Message, out wParams);
-                return new FunctionalException(null, wMsgId, wParams);
-            }
-
+            
             // Si la excepcion es FunctionalException, o TechnicalException,
             // simplemente la retorna.
-            else if (exception is FunctionalException || exception is TechnicalException)
+             if (exception is FunctionalException || exception is TechnicalException)
             {
                 return exception;
             }
@@ -207,22 +204,24 @@ namespace Fwk.Exceptions
                         , sourceObject.GetType().Namespace
                         , sourceObject.GetType().Name
                         , Environment.MachineName
-                        , Environment.GetEnvironmentVariable("USERNAME")
+                        , Environment.UserName
                         , exception);
                 }
             }
         }
 
+   
        
 
 
-
+     
         /// <summary>
         /// Genera un string con el contenido del InnerException .-
         /// </summary>
         /// <param name="ex"></param>
+        /// <param name="includeStackTrace"></param>
         /// <returns></returns>
-        public static String GetAllMessageException(Exception ex)
+        public static String GetAllMessageException(Exception ex, bool includeStackTrace = true)
         {
             StringBuilder wMessage = new StringBuilder();
             wMessage.Append(ex.Message);
@@ -314,19 +313,19 @@ namespace Fwk.Exceptions
         /// <returns>ErrorId de la excepción </returns>
         public static string GetFwkErrorId(Exception ex)
         {
-            throw new NotImplementedException("En desarrollo . Falta implementar para .net core");
-            //if (GetFwkExceptionTypes(ex) == FwkExceptionTypes.FunctionalException || ex.GetType().BaseType == typeof(FunctionalException)) 
-            //{
-            //    return ((FunctionalException)ex).ErrorId;
-            //}
-            //if (GetFwkExceptionTypes(ex) == FwkExceptionTypes.TechnicalException || ex.GetType().BaseType == typeof(TechnicalException)) 
-            //{
-            //    return ((TechnicalException)ex).ErrorId;
-            //}
+           
+            if (GetFwkExceptionTypes(ex) == FwkExceptionTypes.FunctionalException || ex.GetType().BaseType == typeof(FunctionalException)) 
+            {
+                return ((FunctionalException)ex).ErrorId;
+            }
+            if (GetFwkExceptionTypes(ex) == FwkExceptionTypes.TechnicalException || ex.GetType().BaseType == typeof(TechnicalException)) 
+            {
+                return ((TechnicalException)ex).ErrorId;
+            }
             return string.Empty;
 
         }
-       
+    
 
         #endregion
 
@@ -364,8 +363,6 @@ namespace Fwk.Exceptions
 
        
 
-      
-
         #endregion
 
 
@@ -376,10 +373,9 @@ namespace Fwk.Exceptions
         public static void SetTechnicalException<T>(Fwk.Exceptions.TechnicalException te)
         {
             te.Namespace = typeof(T).Namespace;
-            te.Assembly = typeof(T).AssemblyQualifiedName;
-        
+            te.Assembly = typeof(T).Assembly.FullName;
             te.Class = typeof(T).GetType().Name;
-            te.UserName = Environment.GetEnvironmentVariable("USERNAME");
+            te.UserName = Environment.UserName;
             te.Machine = Environment.MachineName;
             te.Source = ConfigurationsHelper.HostApplicationName;
         }
@@ -390,9 +386,9 @@ namespace Fwk.Exceptions
         public static void SetTechnicalException(Fwk.Exceptions.TechnicalException te,Type T)
         {
             te.Namespace = T.Namespace;
-            te.Assembly = T.AssemblyQualifiedName;
+            te.Assembly = T.Assembly.FullName;
             te.Class = T.GetType().Name;
-            te.UserName = Environment.GetEnvironmentVariable("USERNAME");
+            te.UserName = Environment.UserName;
             te.Machine = Environment.MachineName;
             te.Source = ConfigurationsHelper.HostApplicationName;
         }

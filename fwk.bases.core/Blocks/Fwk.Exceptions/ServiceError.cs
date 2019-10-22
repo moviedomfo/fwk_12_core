@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
-using Fwk.Exceptions;
 using Fwk.Bases;
 
 
@@ -72,6 +71,11 @@ namespace Fwk.Exceptions
         #endregion
 
         #region --[Public Properties]--
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ServiceName { get; set; }
+
         /// <summary>
         /// Assembly donde se produce la excepcion.
         /// </summary>
@@ -164,7 +168,8 @@ namespace Fwk.Exceptions
 
         #endregion
 
-  
+
+
 
     
     }

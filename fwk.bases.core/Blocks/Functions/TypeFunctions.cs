@@ -36,7 +36,16 @@ namespace Fwk.HelperFunctions
             }
         }
 
-     
+        /// <summary>
+        /// Valida si el valor pasado por parametro es un numero.-
+        /// </summary>
+        /// <param name="pValue">Texto a evaluar.-</param>
+        /// <returns></returns>
+        public static bool IsNumeric(string pValue)
+        {
+            var isNumeric = int.TryParse(pValue, out int n);
+            return isNumeric;
+        }
 
         /// <summary>
         /// Se valida si la entrada de datos contiene solo Letras

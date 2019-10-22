@@ -132,8 +132,10 @@ namespace Fwk.Security.Cryptography
         /// <returns>Argoritmo</returns>
         static SymetriCypher<T> Add<T>(string providerName, string key) where T : SymmetricAlgorithm
         {
-            if (String.IsNullOrEmpty(providerName))
-                //providerName = _CypherProviders.DefaultProviderName;
+            //TODO: desarrollar proveeores _CypherProviders
+            //if (String.IsNullOrEmpty(providerName))
+              //providerName = _CypherProviders.DefaultProviderName;
+
 
             if (string.IsNullOrEmpty(key))
             {
