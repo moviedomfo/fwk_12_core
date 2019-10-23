@@ -186,7 +186,7 @@ namespace Fwk.Security.Identity
     /// </summary>
     public class secConfig
     {
-        public List<jwtSecurityProvider> providers { get; set; }
+        public List<jwtSecurityProvider> fwk_securityProviders { get; set; }
 
         /// <summary>
         /// 
@@ -197,7 +197,7 @@ namespace Fwk.Security.Identity
         {
 
 
-            if (this.providers == null)
+            if (this.fwk_securityProviders == null)
             {
                 throw new TechnicalException("No se encontro configurada la appSetting secConfig ");
             }
@@ -205,9 +205,9 @@ namespace Fwk.Security.Identity
             jwtSecurityProvider prov = null;
 
             if (string.IsNullOrEmpty(providerName))
-                prov = this.providers.First();
+                prov = this.fwk_securityProviders.First();
             else
-                prov = this.providers.Where(p => p.name.Equals(providerName)).FirstOrDefault();
+                prov = this.fwk_securityProviders.Where(p => p.name.Equals(providerName)).FirstOrDefault();
 
             if (prov==null)
             {
