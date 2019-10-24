@@ -163,7 +163,6 @@ namespace Fwk.DataBase
     /// Data Source=pcpde0369\SQLEXPRESS;Initial Catalog=Gastos;Integrated Security=True
     /// Data Source=pcpde0369\SQLEXPRESS;Initial Catalog=Gastos;User ID=sa
     /// </summary>
-    [XmlInclude(typeof(CnnString)), Serializable]
     public class CnnString : Fwk.Bases.Entity
     {
         private string _Name;

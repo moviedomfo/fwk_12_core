@@ -1,4 +1,5 @@
-﻿using Fwk.Exceptions;
+﻿using Fwk.Database;
+using Fwk.Exceptions;
 using Fwk.HelperFunctions;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -31,7 +32,7 @@ namespace Fwk.Security.Identity
     /// </summary>
     public class helper
     {
-        
+
 
         static void intialize(string settingName)
         {
@@ -63,8 +64,9 @@ namespace Fwk.Security.Identity
             //}
 
         }
-        
-        public static IdentityResult Get_errorIdentityResult(string errorMessage) {
+
+        public static IdentityResult Get_errorIdentityResult(string errorMessage)
+        {
 
             var result = new IdentityResult();
             var err = new IdentityError();
@@ -171,7 +173,15 @@ namespace Fwk.Security.Identity
     /// </summary>
     public class secConfig
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public List<jwtSecurityProvider> fwk_securityProviders { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ConnectionStrings fwk_cnnStrings { get; set; }
 
         /// <summary>
         /// 
@@ -194,7 +204,7 @@ namespace Fwk.Security.Identity
             else
                 prov = this.fwk_securityProviders.Where(p => p.name.Equals(providerName)).FirstOrDefault();
 
-            if (prov==null)
+            if (prov == null)
             {
                 throw new TechnicalException("No se encontro proveedor de seguridad configurado con el nombre " + providerName);
             }
@@ -203,6 +213,62 @@ namespace Fwk.Security.Identity
             return prov;
 
         }
+
+        /// <summary>
+        /// Obtiene la ConnectionString configurada para un porveedor de seguridad
+        /// </summary>
+        /// <param name="providerName"></param>
+        /// <returns></returns>
+        public ConnectionString GetCnnstring(string providerName)
+        {
+            TechnicalException te = null;
+            var prov = GetByName(providerName);
+            if (prov == null)
+            {
+
+                if (string.IsNullOrEmpty(providerName))
+                    te = new TechnicalException("Fwk.Security.Identity error : No se puede obtener el proveedor de seguridad por defecto");
+                else
+                    te = new TechnicalException("Fwk.Security.Identity error : No se puede obtener el proveedor de seguridad " + providerName);
+
+                //ExceptionHelper.SetTechnicalException<SecurityManager>(te);
+                te.ErrorId = "4500";
+                throw te;
+            }
+
+            if (string.IsNullOrEmpty(prov.securityModelContext))
+            {
+                te = new TechnicalException("Fwk.Security.Identity error : el proveedor " + providerName + " no tiene un nombre de cadena de conexión configurada");
+
+                //ExceptionHelper.SetTechnicalException<SecurityManager>(te);
+                te.ErrorId = "4501";
+                throw te;
+            }
+
+            if (fwk_cnnStrings == null)
+            {
+                te = new TechnicalException("No hay cadenas de conexion configuradas");
+
+                //ExceptionHelper.SetTechnicalException<SecurityManager>(te);
+                te.ErrorId = "4502";
+                throw te;
+            }
+
+            var cnn = fwk_cnnStrings.Where(c => c.name.Equals(prov.securityModelContext)).FirstOrDefault();
+
+            if (cnn != null)
+            {
+                te = new TechnicalException("No hay cadena de conexion con el nombre " + prov.securityModelContext);
+
+                //ExceptionHelper.SetTechnicalException<SecurityManager>(te);
+                te.ErrorId = "4502";
+                throw te;
+            }
+            return cnn;
+        }
+
+
+
 
         /// <summary>
         /// retorna el nombre de una cadena de conexion configurada .-
@@ -237,6 +303,8 @@ namespace Fwk.Security.Identity
             return prov.securityModelContext;
         }
     }
+
+
     /// <summary>
     /// Define un objeto con las configuraciones requeridas por el standar JWT
     /// </summary>
@@ -273,4 +341,5 @@ namespace Fwk.Security.Identity
         public int expires { get; set; }
 
     }
+
 }

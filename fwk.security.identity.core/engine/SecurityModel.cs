@@ -16,6 +16,7 @@ namespace Fwk.Security.Identity
     {
         string connectionString;
         public SecurityModelContext(string connectionString) {
+
             this.connectionString = connectionString;
         }
         public SecurityModelContext(DbContextOptions<SecurityModelContext> options):base(options)
