@@ -31,22 +31,7 @@ namespace Fwk.Security.Identity
     /// </summary>
     public class helper
     {
-        static secConfig secConfig = null;
-
-        public static secConfig get_secConfig()
-        {
-            //intialize();
-
-            return secConfig;
-        }
-        static helper()
-        {
-            //return;
-            //var currentDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            Fwk.HelperFunctions.DateFunctions.BeginningOfTimes = new DateTime(1753, 1, 1);
-
-        }
+        
 
         static void intialize(string settingName)
         {
@@ -168,7 +153,7 @@ namespace Fwk.Security.Identity
     /// <summary>
     /// En asp net core este valor debe ser seteado luego de ser inicializado en Startup
     /// var serverSettings = new secConfig();
-    ///   Configuration.Bind("secConfig", secConfig);      
+    ///   Configuration.Bind("fwk_securityProviders", secConfig);      
     ///   services.AddSingleton(secConfig);
     ///  
     /// El json secConfig debe ser incluido en appsettings.json en raiz.-
@@ -178,7 +163,7 @@ namespace Fwk.Security.Identity
     ///         "Microsoft": "Information"
     ///             }
     ///     },
-    ///    "secConfig":[
+    ///    "fwk_securityProviders":[
     ///                 {..}, 
     ///                 {..}
     ///              ]  
