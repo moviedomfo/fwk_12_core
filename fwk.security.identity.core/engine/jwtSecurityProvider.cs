@@ -181,14 +181,14 @@ namespace Fwk.Security.Identity
         /// <summary>
         /// 
         /// </summary>
-        public ConnectionStrings fwk_cnnStrings { get; set; }
+        public  ConnectionStrings cnnStrings { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="providerName"></param>
         /// <returns></returns>
-        public jwtSecurityProvider GetByName(string providerName)
+        public  jwtSecurityProvider GetByName(string providerName)
         {
 
 
@@ -245,7 +245,7 @@ namespace Fwk.Security.Identity
                 throw te;
             }
 
-            if (fwk_cnnStrings == null)
+            if (cnnStrings == null)
             {
                 te = new TechnicalException("No hay cadenas de conexion configuradas");
 
@@ -254,9 +254,9 @@ namespace Fwk.Security.Identity
                 throw te;
             }
 
-            var cnn = fwk_cnnStrings.Where(c => c.name.Equals(prov.securityModelContext)).FirstOrDefault();
+            var cnn = cnnStrings.Where(c => c.name.Equals(prov.securityModelContext)).FirstOrDefault();
 
-            if (cnn != null)
+            if (cnn == null)
             {
                 te = new TechnicalException("No hay cadena de conexion con el nombre " + prov.securityModelContext);
 
