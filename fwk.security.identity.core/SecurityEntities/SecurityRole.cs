@@ -7,7 +7,7 @@ namespace Fwk.Security.Identity
     
     
 
-    public partial class SecurityRole: IdentityRole<Guid>
+    public partial class SecurityRole//: IdentityRole<Guid>
     {
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SecurityRole():base()
@@ -15,22 +15,22 @@ namespace Fwk.Security.Identity
             SecurityRules = new HashSet<SecurityRule>();
             SecurityUsers = new HashSet<SecurityUser>();
         }
-        public SecurityRole(string roleName) : base(roleName)
-        {
-            SecurityRules = new HashSet<SecurityRule>();
-            SecurityUsers = new HashSet<SecurityUser>();
-        }
+        //public SecurityRole(string roleName) : base(roleName)
+        //{
+        //    SecurityRules = new HashSet<SecurityRule>();
+        //    SecurityUsers = new HashSet<SecurityUser>();
+        //}
 
 
-        public SecurityRole(string roleName,string description) : base(roleName)
-        {
-            SecurityRules = new HashSet<SecurityRule>();
-            SecurityUsers = new HashSet<SecurityUser>();
+        //public SecurityRole(string roleName,string description) : base(roleName)
+        //{
+        //    SecurityRules = new HashSet<SecurityRule>();
+        //    SecurityUsers = new HashSet<SecurityUser>();
 
-            Description = description;
-        }
+        //    Description = description;
+        //}
 
-
+        [Key]
         public Guid Id { get; set; }
 
         public string Description { get; set; }

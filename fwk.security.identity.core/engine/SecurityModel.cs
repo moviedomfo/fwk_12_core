@@ -10,6 +10,7 @@ namespace Fwk.Security.Identity
 {
 
     /// <summary>
+    /// https://www.youtube.com/watch?v=fnd23XZVjBk
     /// https://www.youtube.com/watch?v=D06nNkfJK8w
     /// </summary>
     public class SecurityModelContext : DbContext
@@ -19,10 +20,10 @@ namespace Fwk.Security.Identity
 
             this.connectionString = connectionString;
         }
-        public SecurityModelContext(DbContextOptions<SecurityModelContext> options):base(options)
-        {
+        //public SecurityModelContext(DbContextOptions<SecurityModelContext> options):base(options)
+        //{
             
-        }
+        //}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

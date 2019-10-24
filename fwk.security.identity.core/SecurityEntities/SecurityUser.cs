@@ -10,7 +10,7 @@ using System.Linq;
 namespace Fwk.Security.Identity
 {
   
-    public partial class SecurityUser :IdentityUser<Guid>
+    public partial class SecurityUser //:IdentityUser<Guid>
     {
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SecurityUser():base()
@@ -19,7 +19,7 @@ namespace Fwk.Security.Identity
             SecurityUserClaims = new HashSet<SecurityUserClaim>();
             SecurityRoles = new HashSet<SecurityRole>();
         }
-
+        [Key]
         public Guid Id { get; set; }
 
         [StringLength(256)]

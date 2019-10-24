@@ -15,6 +15,7 @@ namespace Fwk.Security.Identity
 
     public class SecurityRoleBE : BaseEntity
     {
+       
         public Guid Id { get; set; }
         public String Description { get; set; }
         public String Name { get; set; }
