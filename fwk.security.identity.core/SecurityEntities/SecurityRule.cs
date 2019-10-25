@@ -10,10 +10,10 @@ namespace  Fwk.Security.Identity
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SecurityRule()
         {
-            SecurityRoles = new HashSet<SecurityRole>();
-            SecurityRulesCategories = new HashSet<SecurityRulesCategory>();
+            SecurityRolesInRules = new HashSet<SecurityRolesInRules>();
+            SecurityRulesInCategory = new HashSet<SecurityRulesInCategory>();
         }
-
+        [Key]
         public Guid Id { get; set; }
 
  
@@ -25,9 +25,11 @@ namespace  Fwk.Security.Identity
         public string Name { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityRole> SecurityRoles { get; set; }
+        public  ICollection<SecurityRolesInRules> SecurityRolesInRules { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityRulesCategory> SecurityRulesCategories { get; set; }
+        public  ICollection<SecurityRulesInCategory> SecurityRulesInCategory { get; set; }
     }
+
+  
 }

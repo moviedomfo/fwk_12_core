@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fwk.Security.Identity
+namespace Fwk.Security.Identity.BE
 {
+
     public class SecurityRuleBEList : BaseEntities<SecurityRuleBE>
     {
 

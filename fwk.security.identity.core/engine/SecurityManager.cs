@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
+
+
 using System.Threading.Tasks;
 using Fwk.Exceptions;
-using Fwk.Security;
-using Fwk.Security.Common;
-using Fwk.Security.Identity;
+using Fwk.Security.Identity.BE;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fwk.Security.Identity
@@ -93,12 +91,12 @@ namespace Fwk.Security.Identity
                 {
                     var user = db.SecurityUsers.Where(item => item.UserName.Equals(username)).FirstOrDefault();
 
-                    user.SecurityRoles.ToList().ForEach(rol =>
+                    user.SecurityUserRoles.ToList().ForEach(rol =>
                     {
                         r = new SecurityRoleBE();
-                        r.Id = rol.Id;
-                        r.Name = rol.Name;
-                        r.Description = rol.Description;
+                        r.Id = rol.RolId;
+                        r.Name = rol.SecurityRole.Name;
+                        r.Description = rol.SecurityRole.Description;
                         list.Add(r);
                     });
 
@@ -120,9 +118,9 @@ namespace Fwk.Security.Identity
                 {
                     var user = db.SecurityUsers.Where(item => item.Id == id).FirstOrDefault();
 
-                    user.SecurityRoles.ToList().ForEach(rol =>
+                    user.SecurityUserRoles.ToList().ForEach(rol =>
                     {
-                        user.SecurityRoles.Remove(rol);
+                        user.SecurityUserRoles.Remove(rol);
                         db.SaveChanges();
                     });
 
@@ -169,10 +167,10 @@ namespace Fwk.Security.Identity
                 {
                     var user = db.SecurityUsers.Where(item => item.UserName.ToLower() == userName.ToLower()).FirstOrDefault();
 
-                    var rol = user.SecurityRoles.Where(r => r.Name.ToLower() == rolName.ToLower()).FirstOrDefault();
+                    var rol = user.SecurityUserRoles.Where(r => r.SecurityRole.Name.ToLower() == rolName.ToLower()).FirstOrDefault();
                     if (rol != null)
                     {
-                        user.SecurityRoles.Remove(rol);
+                        user.SecurityUserRoles.Remove(rol);
                         db.SaveChanges();
                     }
 
@@ -215,7 +213,7 @@ namespace Fwk.Security.Identity
                         user.Id = Guid.NewGuid();
                     if (asignRoles == false)
                     {
-                        user.SecurityRoles = null;
+                        user.SecurityUserRoles = null;
                     }
                     db.SecurityUsers.Add(user);
                     var res = db.SaveChanges();
@@ -379,13 +377,13 @@ namespace Fwk.Security.Identity
             userBe.UserName = user.UserName;
             userBe.TwoFactorEnabled = user.TwoFactorEnabled;
 
-            if (user.SecurityRoles.Count != 0)
+            if (user.SecurityUserRoles.Count != 0)
             {
 
                 userBe.Roles = new List<String>();
-                user.SecurityRoles.ToList().ForEach(r =>
+                user.SecurityUserRoles.ToList().ForEach(r =>
                 {
-                    userBe.Roles.Add(r.Name);
+                    userBe.Roles.Add(r.SecurityRole.Name);
                 });
             }
             return userBe;
@@ -396,14 +394,19 @@ namespace Fwk.Security.Identity
             try
             {
 
-                ICollection<SecurityRole> r;
+                
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
                 {
                     var user = db.SecurityUsers.Where(p => p.UserName.ToLower() == userName.ToLower()).FirstOrDefault();
                     if (user != null && includeRoles)
                     {
+                        user.SecurityRoles = new List<SecurityRole>();
                         //al consultarlo se incluye la busqueda
-                        r = user.SecurityRoles;
+                        foreach (var r in user.SecurityUserRoles.ToArray())
+                        {
+                            user.SecurityRoles.Add(r.SecurityRole);
+                        }
+                        
                     }
                     return user;
 
@@ -441,7 +444,7 @@ namespace Fwk.Security.Identity
         }
         public static SecurityUser User_FindById(Guid usderId, bool includeRoles = false, string sec_provider = "")
         {
-            ICollection<SecurityRole> r;
+            
             try
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
@@ -449,8 +452,13 @@ namespace Fwk.Security.Identity
                     var user = db.SecurityUsers.Where(p => p.Id == usderId).FirstOrDefault();
                     if (includeRoles)
                     {
+                        user.SecurityRoles = new List<SecurityRole>();
                         //al consultarlo se incluye la busqueda
-                        r = user.SecurityRoles;
+                        foreach (var r in user.SecurityUserRoles.ToArray())
+                        {
+                            user.SecurityRoles.Add(r.SecurityRole);
+                        }
+                        
                     }
                     return user; ;
 
@@ -488,8 +496,10 @@ namespace Fwk.Security.Identity
                                 result = helper.Get_errorIdentityResult(String.Format("El rol {0} no existe .- ", rolName));
                                 break;
                             }
-
-                            userFromBD.SecurityRoles.Add(rol);
+                            SecurityUserRoles wSecurityUserRoles = new SecurityUserRoles();
+                            wSecurityUserRoles.RolId = rol.Id;
+                            wSecurityUserRoles.UserId = userFromBD.Id;
+                            db.SecurityUserRoles.Add(wSecurityUserRoles);
 
                         }
 
@@ -585,7 +595,7 @@ namespace Fwk.Security.Identity
                     result.Status = SecuritySignInStatus.Success.ToString();
                     result.User = user;
                     result.User.PasswordHash = "";
-                    var roles = result.User.SecurityRoles.Count;
+                    var roles = result.User.SecurityUserRoles.Count;
 
 
                 }
@@ -665,8 +675,8 @@ namespace Fwk.Security.Identity
         #region -- roles -- 
         public static SecurityRole Role_FindById(Guid roleId, bool includeRules = false, bool includeUsers = false, string sec_provider = "")
         {
-            ICollection<SecurityRule> r;
-            ICollection<SecurityUser> u;
+            ICollection<SecurityRolesInRules> r;
+            ICollection<SecurityUserRoles> u;
             try
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
@@ -675,12 +685,12 @@ namespace Fwk.Security.Identity
                     if (includeRules)
                     {
                         //al consultarlo se incluye la busqueda
-                        r = role.SecurityRules;
+                        r = role.SecurityRolesInRules;
                     }
                     if (includeUsers)
                     {
                         //al consultarlo se incluye la busqueda
-                        u = role.SecurityUsers;
+                        u = role.SecurityUserRoles;
                     }
                     return role;
 
@@ -696,8 +706,8 @@ namespace Fwk.Security.Identity
 
         public static SecurityRole Role_FindByName(String roleName, bool includeRules = false, bool includeUsers = false, string sec_provider = "")
         {
-            ICollection<SecurityRule> r;
-            ICollection<SecurityUser> u;
+            ICollection<SecurityRolesInRules> r;
+            ICollection<SecurityUserRoles> u;
             try
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
@@ -706,12 +716,12 @@ namespace Fwk.Security.Identity
                     if (includeRules)
                     {
                         //al consultarlo se incluye la busqueda
-                        r = role.SecurityRules;
+                        r = role.SecurityRolesInRules;
                     }
                     if (includeUsers)
                     {
                         //al consultarlo se incluye la busqueda
-                        u = role.SecurityUsers;
+                        u = role.SecurityUserRoles;
                     }
                     return role;
 
@@ -779,8 +789,10 @@ namespace Fwk.Security.Identity
                                 result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleName) );
                                 break;
                             }
-
-                            role.SecurityRules.Add(rule);
+                            SecurityRolesInRules sr = new SecurityRolesInRules();
+                            sr.RolId = role.Id;
+                            sr.RuleId = rule.Id;
+                            db.SecurityRolesInRules.Add(sr);
 
                         }
 
@@ -872,6 +884,8 @@ namespace Fwk.Security.Identity
                 throw ex;
             }
         }
+
+
         internal static bool Rule_check(string ruleName, string userName, string sec_provider)
         {
 
@@ -884,8 +898,10 @@ namespace Fwk.Security.Identity
                     var securityRule = db.SecurityRules.Where(item => item.Name.ToLower() == ruleName.ToLower()).FirstOrDefault();
                     if (securityRule != null && user == null)
                     {
-                        var roles = securityRule.SecurityRoles;
-                        var insersect = user.SecurityRoles.Intersect(securityRule.SecurityRoles);
+                        var roles_in_Rule = from r in securityRule.SecurityRolesInRules select r.RolId;
+                        var roles_in_User = from r in user.SecurityUserRoles select r.RolId;
+
+                        var insersect = roles_in_User.Intersect(roles_in_Rule);
 
                         return insersect.Count() != 0;
                     }
@@ -1003,8 +1019,10 @@ namespace Fwk.Security.Identity
                                 result =helper.Get_errorIdentityResult( String.Format("La rol {0} no existe .- ", rolName) );
                                 break;
                             }
-
-                            rule.SecurityRoles.Add(rol);
+                            SecurityRolesInRules rolesInRule = new SecurityRolesInRules();
+                            rolesInRule.RuleId = rule.Id;
+                            rolesInRule.RolId = rol.Id;
+                            rule.SecurityRolesInRules.Add(rolesInRule);
 
                         }
 
@@ -1147,8 +1165,10 @@ namespace Fwk.Security.Identity
                                 result =helper.Get_errorIdentityResult( String.Format("La regla {0} no existe .- ", ruleId) );
                                 break;
                             }
-
-                            category.SecurityRules.Add(rule);
+                            var sRC = new SecurityRulesInCategory();
+                            sRC.CategoryId = category.CategoryId;
+                            sRC.RuleId = rule.Id;
+                            category.SecurityRulesInCategory.Add(sRC);
 
                         }
 

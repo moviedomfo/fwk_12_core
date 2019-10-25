@@ -17,7 +17,7 @@ namespace Fwk.Security.Identity
         {
             SecuritytUserLogins = new HashSet<SecuritytUserLogin>();
             SecurityUserClaims = new HashSet<SecurityUserClaim>();
-            SecurityRoles = new HashSet<SecurityRole>();
+            SecurityUserRoles = new HashSet<SecurityUserRoles>();
         }
         [Key]
         public Guid Id { get; set; }
@@ -52,15 +52,15 @@ namespace Fwk.Security.Identity
         public string UserName { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecuritytUserLogin> SecuritytUserLogins { get; set; }
+        public  ICollection<SecuritytUserLogin> SecuritytUserLogins { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityUserClaim> SecurityUserClaims { get; set; }
+        public  ICollection<SecurityUserClaim> SecurityUserClaims { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityRole> SecurityRoles { get; set; }
+        public  ICollection<SecurityUserRoles> SecurityUserRoles { get; set; }
 
-
+        public List<SecurityRole> SecurityRoles { get; set; }
 
         public List<String> GetRolesArray()
         {

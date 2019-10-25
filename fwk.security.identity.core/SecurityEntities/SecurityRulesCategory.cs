@@ -12,7 +12,7 @@ namespace  Fwk.Security.Identity
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SecurityRulesCategory()
         {
-            SecurityRules = new HashSet<SecurityRule>();
+            SecurityRulesInCategory = new HashSet<SecurityRulesInCategory>();
         }
 
         [Key]
@@ -23,6 +23,6 @@ namespace  Fwk.Security.Identity
         public Guid? ParentCategoryId { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityRule> SecurityRules { get; set; }
+        public virtual ICollection<SecurityRulesInCategory> SecurityRulesInCategory { get; set; }
     }
 }
