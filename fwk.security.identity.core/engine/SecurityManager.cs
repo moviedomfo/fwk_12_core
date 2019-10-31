@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Fwk.Exceptions;
 using Fwk.Security.Identity.BE;
+using Fwk.Security.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fwk.Security.Identity
@@ -110,6 +111,11 @@ namespace Fwk.Security.Identity
             }
         }
 
+        /// <summary>
+        /// remove all roles from user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="sec_provider"></param>
         internal static void User_RemoveRoles(Guid id, string sec_provider = "")
         {
             try
@@ -182,6 +188,13 @@ namespace Fwk.Security.Identity
             }
         }
 
+        /// <summary>
+        /// Create new SecurityUser ; the user Id will be generated automatically
+        /// </summary>
+        /// <param name="user">SecurityUser </param>
+        /// <param name="password">Confirmed password</param>
+        /// <param name="sec_provider">Security provider</param>
+        /// <returns></returns>
         public static async Task<IdentityResult> User_CreateAsync(SecurityUser user, string password, string sec_provider = "")
         {
             try
@@ -216,6 +229,7 @@ namespace Fwk.Security.Identity
                         user.SecurityUserRoles = null;
                     }
                     db.SecurityUsers.Add(user);
+
                     var res = db.SaveChanges();
                     return IdentityResult.Success;
 
@@ -367,7 +381,7 @@ namespace Fwk.Security.Identity
             return true;
         }
 
-        internal static SecurityUserBE GetUsrBE(SecurityUser user)
+        internal static SecurityUserBE GetUserBE(SecurityUser user)
         {
             SecurityUserBE userBe = new SecurityUserBE();
             userBe.AccessFailedCount = user.AccessFailedCount;
@@ -522,6 +536,9 @@ namespace Fwk.Security.Identity
             }
             return result;
         }
+
+
+
 
         public static Task<IdentityResult> User_RemoveLoginAsync(Guid userId, UserLoginInfo userLoginInfo)
         {

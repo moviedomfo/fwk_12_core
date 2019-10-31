@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
-namespace Fwk.Security.Identity
+namespace Fwk.Security.Identity.Models
 {
     // Models used as parameters to AccountController actions.
 

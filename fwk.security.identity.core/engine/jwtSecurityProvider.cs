@@ -65,17 +65,17 @@ namespace Fwk.Security.Identity
 
         }
 
-        public static IdentityResult Get_errorIdentityResult(string errorMessage)
+        public static IdentityResult Get_errorIdentityResult(string errorMessage,string code="")
         {
-
-            var result = new IdentityResult();
             var err = new IdentityError();
             err.Description = errorMessage;
-
-            result.Errors.ToList().Add(err);
-
-            return result;
+            err.Code = code;
+            var errorList = new List<IdentityError> ();
+            errorList.Add(err);
+            return IdentityResult.Failed(errorList.ToArray());
         }
+
+
         public static string GetHash(string input)
         {
             HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider();
