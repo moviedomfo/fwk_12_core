@@ -221,6 +221,7 @@ namespace Fwk.Security.Identity
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
                 {
+                    user.CreatedDate = System.DateTime.Now;
                     user.PasswordHash = helper.GetHash(password);
                     if (user.Id == null || user.Id.Equals(emptyGuid))
                         user.Id = Guid.NewGuid();
