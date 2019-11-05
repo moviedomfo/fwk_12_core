@@ -92,7 +92,7 @@ namespace Fwk.Params.Back
         /// <param name="culture"></param>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public static ParamBE Get(int? paramId, string culture, string connectionString)
+        public static ParamBE Get(int paramId, string culture, string connectionString)
         {
             ParamBE item = null;
             ParamList list = new ParamList();
@@ -105,8 +105,8 @@ namespace Fwk.Params.Back
                 using (SqlCommand cmd = new SqlCommand("dbo.fwk_Param_g", cnn) { CommandType = System.Data.CommandType.StoredProcedure })
                 {
 
-                    if (paramId.HasValue)
-                        cmd.Parameters.AddWithValue("@parentId", paramId);
+                    
+                    cmd.Parameters.AddWithValue("@paramId", paramId);
                     if (!string.IsNullOrEmpty(culture))
                         cmd.Parameters.AddWithValue("@culture", culture);
 
@@ -118,7 +118,8 @@ namespace Fwk.Params.Back
                             item = new ParamBE();
                             item.Id = Convert.ToInt32(reader["Id"]);
                             item.ParamId = Convert.ToInt32(reader["ParamId"]);
-                            item.ParentId = Convert.ToInt32(reader["ParentId"]);
+                            if (reader["ParentId"] != DBNull.Value)
+                                item.ParentId = Convert.ToInt32(reader["ParentId"]);
                             item.Enabled = Convert.ToBoolean(reader["Enabled"]);
                             item.Culture = reader["Culture"].ToString();
                             if (reader["Description"] != DBNull.Value)
@@ -210,7 +211,8 @@ namespace Fwk.Params.Back
                             item = new ParamBE();
                             item.Id = Convert.ToInt32(reader["Id"]);
                             item.ParamId = Convert.ToInt32(reader["ParamId"]);
-                            item.ParentId = Convert.ToInt32(reader["ParentId"]);
+                            if (reader["ParentId"] != DBNull.Value)
+                                item.ParentId = Convert.ToInt32(reader["ParentId"]);
                             item.Enabled = Convert.ToBoolean(reader["Enabled"]);
                             item.Culture = reader["Culture"].ToString();
                             if (reader["Description"] != DBNull.Value)
