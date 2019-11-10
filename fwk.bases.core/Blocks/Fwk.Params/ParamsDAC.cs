@@ -121,6 +121,7 @@ namespace Fwk.Params.Back
                             if (reader["ParentId"] != DBNull.Value)
                                 item.ParentId = Convert.ToInt32(reader["ParentId"]);
                             item.Enabled = Convert.ToBoolean(reader["Enabled"]);
+                            item.Name = reader["Name"].ToString();
                             item.Culture = reader["Culture"].ToString();
                             if (reader["Description"] != DBNull.Value)
                                 item.Description = reader["Description"].ToString();
@@ -211,6 +212,7 @@ namespace Fwk.Params.Back
                             item = new ParamBE();
                             item.Id = Convert.ToInt32(reader["Id"]);
                             item.ParamId = Convert.ToInt32(reader["ParamId"]);
+                            item.Name = reader["Name"].ToString();
                             if (reader["ParentId"] != DBNull.Value)
                                 item.ParentId = Convert.ToInt32(reader["ParentId"]);
                             item.Enabled = Convert.ToBoolean(reader["Enabled"]);
