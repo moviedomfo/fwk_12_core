@@ -686,7 +686,30 @@ namespace Fwk.Security.Identity
 
 
         }
+        public static IdentityResult User_ressetPassword(string userName, string newPassword, string sec_provider)
+        {
 
+            
+            try
+            {
+                using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
+                {
+
+                    var user = db.SecurityUsers.Where(p => p.UserName.ToLower() == userName.ToLower()).FirstOrDefault();
+                    user.PasswordHash = helper.GetHash(newPassword);
+
+                    var res = db.SaveChanges();
+                    return IdentityResult.Success;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return helper.Get_errorIdentityResult(Fwk.Exceptions.ExceptionHelper.GetAllMessageException(ex));
+            }
+
+
+        }
 
         #endregion
 
