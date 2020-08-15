@@ -25,4 +25,8 @@
     <ProjectReference Include="..\fwk.security.core\fwk.security.core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SecurityEntities\model2\" />
+  </ItemGroup>
+
 </Project>

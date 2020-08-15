@@ -18,9 +18,8 @@ namespace Fwk.Security.Identity
 
         [Key]
         [Column(Order = 2)]
-        [ForeignKey("UserId")]
         public Guid UserId { get; set; }
 
-        public SecurityUser SecurityUser { get; set; }
+        public virtual SecurityUser SecurityUser { get; set; }
     }
 }

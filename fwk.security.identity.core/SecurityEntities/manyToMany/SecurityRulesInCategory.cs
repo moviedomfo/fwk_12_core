@@ -4,14 +4,11 @@ namespace Fwk.Security.Identity
 
     public  class SecurityRulesInCategory
     {
-       
-        
-        public Guid CategoryId { get; set; }
-        public SecurityRulesCategory SecurityRulesCategory { get; set; }
 
         public Guid RuleId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public SecurityRule SecurityRule { get; set; }
-
+        public SecurityRulesCategory SecurityRulesCategory { get; set; }
     }
 }

@@ -3,17 +3,17 @@ namespace Fwk.Security.Identity
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
-    public partial class SecurityRole//: IdentityRole<Guid>
+    using System.ComponentModel.DataAnnotations.Schema;
+    
+    public partial class SecurityRole
     {
-        public SecurityRole():base()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SecurityRole()
         {
-            SecurityRolesInRules = new HashSet<SecurityRolesInRules>();
-            SecurityUserRoles = new HashSet<SecurityUserRoles>();
+            SecurityRules = new HashSet<SecurityRule>();
+            SecurityUsers = new HashSet<SecurityUser>();
         }
-        
 
-        [Key]
         public Guid Id { get; set; }
 
         public string Description { get; set; }
@@ -21,13 +21,14 @@ namespace Fwk.Security.Identity
         [Required]
         [StringLength(256)]
         public string Name { get; set; }
+
+        public Guid? InstitutionId { get; set; }
         
-        public virtual ICollection<SecurityRolesInRules> SecurityRolesInRules { get; set; }
 
-        public virtual ICollection<SecurityUserRoles> SecurityUserRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SecurityRule> SecurityRules { get; set; }
 
-
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SecurityUser> SecurityUsers { get; set; }
     }
-
-
 }

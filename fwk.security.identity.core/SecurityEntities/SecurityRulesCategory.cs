@@ -1,4 +1,4 @@
-namespace  Fwk.Security.Identity
+namespace Fwk.Security.Identity
 {
     using System;
     using System.Collections.Generic;
@@ -9,10 +9,10 @@ namespace  Fwk.Security.Identity
     [Table("SecurityRulesCategory")]
     public partial class SecurityRulesCategory
     {
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SecurityRulesCategory()
         {
-            SecurityRulesInCategory = new HashSet<SecurityRulesInCategory>();
+            SecurityRules = new HashSet<SecurityRule>();
         }
 
         [Key]
@@ -22,7 +22,7 @@ namespace  Fwk.Security.Identity
 
         public Guid? ParentCategoryId { get; set; }
 
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecurityRulesInCategory> SecurityRulesInCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SecurityRule> SecurityRules { get; set; }
     }
 }

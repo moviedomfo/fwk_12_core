@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fwk.Security.Identity.BE
+namespace Fwk.Security.Identity
 {
     public class SecurityUserBE: BaseEntity
     {
@@ -63,6 +63,15 @@ namespace Fwk.Security.Identity.BE
         // Resumen:
         //     Navigation property for user roles
         public List<String> Roles { get; set; }
+
+        public Guid? InstitutionId { get; set; }
+        public DateTime CreatedDate { get; internal set; }
+
+        public bool? IsApproved { get; set; }
+        public Int16? FailedPasswordAttemptCount { get; set; }
+
+        public bool? IsLockedOut { get; set; }
+        
         ////
         //// Resumen:
         ////     Navigation property for user claims

@@ -19,7 +19,8 @@ namespace Fwk.Security.Identity
             SecurityUserClaims = new HashSet<SecurityUserClaim>();
             SecurityUserRoles = new HashSet<SecurityUserRoles>();
         }
-        [Key]
+
+
         public Guid Id { get; set; }
 
         [StringLength(256)]
@@ -43,13 +44,21 @@ namespace Fwk.Security.Identity
 
         public int AccessFailedCount { get; set; }
 
-
         public DateTime CreatedDate { get; set; }
+
         public DateTime? LastLogInDate { get; set; }
 
         [Required]
         [StringLength(256)]
-        public string UserName { get; set; }    
+        public string UserName { get; set; }
+
+        public bool? IsLockedOut { get; set; }
+
+        public short? FailedPasswordAttemptCount { get; set; }
+
+        public bool? IsApproved { get; set; }
+
+        public Guid? InstitutionId { get; set; }
 
         //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public  ICollection<SecuritytUserLogin> SecuritytUserLogins { get; set; }

@@ -7,7 +7,6 @@ using System.Security.Claims;
 
 using System.Threading.Tasks;
 using Fwk.Exceptions;
-using Fwk.Security.Identity.BE;
 using Fwk.Security.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -716,8 +715,8 @@ namespace Fwk.Security.Identity
         #region -- roles -- 
         public static SecurityRole Role_FindById(Guid roleId, bool includeRules = false, bool includeUsers = false, string sec_provider = "")
         {
-            ICollection<SecurityRolesInRules> r;
-            ICollection<SecurityUserRoles> u;
+            ICollection<SecurityRule> r;
+            ICollection<SecurityUser> u;
             try
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
@@ -726,12 +725,12 @@ namespace Fwk.Security.Identity
                     if (includeRules)
                     {
                         //al consultarlo se incluye la busqueda
-                        r = role.SecurityRolesInRules;
+                        r = role.SecurityRules;
                     }
                     if (includeUsers)
                     {
                         //al consultarlo se incluye la busqueda
-                        u = role.SecurityUserRoles;
+                        u = role.SecurityUsers;
                     }
                     return role;
 
@@ -747,8 +746,10 @@ namespace Fwk.Security.Identity
 
         public static SecurityRole Role_FindByName(String roleName, bool includeRules = false, bool includeUsers = false, string sec_provider = "")
         {
-            ICollection<SecurityRolesInRules> r;
-            ICollection<SecurityUserRoles> u;
+            //icollection<securityrolesinrules> r;
+            //icollection<securityuserroles> u;
+            ICollection<SecurityRule> r;
+            ICollection<SecurityUser> u;
             try
             {
                 using (SecurityModelContext db = new SecurityModelContext(get_secConfig().GetCnnstring(sec_provider).cnnString))
@@ -757,12 +758,13 @@ namespace Fwk.Security.Identity
                     if (includeRules)
                     {
                         //al consultarlo se incluye la busqueda
-                        r = role.SecurityRolesInRules;
+                        //r = role.SecurityRolesInRules;
+                        r = role.SecurityRules;
                     }
                     if (includeUsers)
                     {
                         //al consultarlo se incluye la busqueda
-                        u = role.SecurityUserRoles;
+                        u = role.SecurityUsers;
                     }
                     return role;
 
@@ -926,7 +928,14 @@ namespace Fwk.Security.Identity
             }
         }
 
-
+        //TODO: probar Rule_check
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ruleName"></param>
+        /// <param name="userName"></param>
+        /// <param name="sec_provider"></param>
+        /// <returns></returns>
         internal static bool Rule_check(string ruleName, string userName, string sec_provider)
         {
 
@@ -939,8 +948,8 @@ namespace Fwk.Security.Identity
                     var securityRule = db.SecurityRules.Where(item => item.Name.ToLower() == ruleName.ToLower()).FirstOrDefault();
                     if (securityRule != null && user == null)
                     {
-                        var roles_in_Rule = from r in securityRule.SecurityRolesInRules select r.RolId;
-                        var roles_in_User = from r in user.SecurityUserRoles select r.RolId;
+                        var roles_in_Rule = from r in securityRule.SecurityRoles select r.Id;
+                        var roles_in_User = from r in user.SecurityRoles select r.Id;
 
                         var insersect = roles_in_User.Intersect(roles_in_Rule);
 
@@ -1035,6 +1044,14 @@ namespace Fwk.Security.Identity
                 throw ex;
             }
         }
+
+        //TODO: probar Rule_AsignRoles
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="sec_provider"></param>
+        /// <returns></returns>
         public static IdentityResult Rule_AsignRoles(AssignRolesToRuleModel model, string sec_provider)
         {
 
@@ -1063,7 +1080,7 @@ namespace Fwk.Security.Identity
                             SecurityRolesInRules rolesInRule = new SecurityRolesInRules();
                             rolesInRule.RuleId = rule.Id;
                             rolesInRule.RolId = rol.Id;
-                            rule.SecurityRolesInRules.Add(rolesInRule);
+                            db.SecurityRolesInRules.Add(rolesInRule);
 
                         }
 
@@ -1181,6 +1198,13 @@ namespace Fwk.Security.Identity
                 db.SecurityRulesCategories.Remove(category);
             }
         }
+
+        /// <summary>
+        /// probar Category_AsignRules
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="sec_provider"></param>
+        /// <returns></returns>
         public static IdentityResult Category_AsignRules(AssignRulesToCategoryModel model, string sec_provider)
         {
 
@@ -1209,7 +1233,8 @@ namespace Fwk.Security.Identity
                             var sRC = new SecurityRulesInCategory();
                             sRC.CategoryId = category.CategoryId;
                             sRC.RuleId = rule.Id;
-                            category.SecurityRulesInCategory.Add(sRC);
+                            //category.SecurityRulesInCategory.Add(sRC);
+                            db.SecurityRulesInCategory.Add(sRC);
 
                         }
 
